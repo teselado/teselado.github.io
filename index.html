@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- Code heavily borrow from: https://github.com/ironwallaby/delaunay
+    color palette from: https://www.color-hex.com/color-palette/78329
+    --> 
+<html>
+  <head>
+    <style>
+      body {
+        background-color:  #D1E5F1
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="1800" height="800">
+    </canvas>
+
+    <script type="text/javascript" src="delaunay.js">
+    </script>
+
+    <script type="text/javascript">
+      var canvas = document.getElementById("canvas"),
+          ctx = canvas.getContext("2d"),
+          vertices = new Array(500),
+          i, x, y;
+
+      for(i = vertices.length; i--; ) {
+        x = Math.random() * canvas.width;
+        y = Math.random() * canvas.height;
+        vertices[i] = [x, y];
+
+      }
+
+      console.time("triangulate");
+      var triangles = Delaunay.triangulate(vertices);
+      console.timeEnd("triangulate");
+
+      for(i = triangles.length; i; ) {
+        var myArray = [
+            '#446eb6',
+            '#fdeb4c',
+            '#c7cd74',
+            '#f2a953',
+            '#aaaaaa'
+            ];
+        var rand = myArray[Math.floor(Math.random() * myArray.length)];
+        ctx.fillStyle = rand;
+        ctx.beginPath();
+        --i; ctx.moveTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+        --i; ctx.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+        --i; ctx.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+        ctx.closePath();
+        ctx.fill();
+      }
+    </script>
+  </body>
+</html>
